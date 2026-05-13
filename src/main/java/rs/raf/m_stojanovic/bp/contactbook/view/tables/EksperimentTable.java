@@ -1,9 +1,11 @@
 package rs.raf.m_stojanovic.bp.contactbook.view.tables;
 
 import javafx.collections.FXCollections;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import rs.raf.m_stojanovic.bp.contactbook.controller.ShowValutaControl;
 import rs.raf.m_stojanovic.bp.contactbook.model.EksperimentDto;
 
 import java.math.BigDecimal;
@@ -15,33 +17,54 @@ public class EksperimentTable extends TableView<EksperimentDto> {
         super(FXCollections.observableArrayList(eksperimentDtos));
 
         TableColumn<EksperimentDto, Integer> tcEksperimentId = new TableColumn<>("Eksperiment ID");
-        TableColumn<EksperimentDto, Integer> tcValutaId = new TableColumn<>("Valuta ID");
         TableColumn<EksperimentDto, String> tcNaziv = new TableColumn<>("Naziv");
-        TableColumn<EksperimentDto, String> tcTipEksperimenta = new TableColumn<>("Tip eksperimenta");
         TableColumn<EksperimentDto, String> tcOpis = new TableColumn<>("Opis");
-        TableColumn<EksperimentDto, Integer> tcBrojUcesnika = new TableColumn<>("Broj ucesnika");
-        TableColumn<EksperimentDto, String> tcCilj = new TableColumn<>("Cilj");
+        TableColumn<EksperimentDto, String> tcCiljIstrazivanja = new TableColumn<>("Cilj istrazivanja");
+        TableColumn<EksperimentDto, Integer> tcPredvidjeniBrojUcesnika = new TableColumn<>("Predvidjeni broj ucesnika");
         TableColumn<EksperimentDto, BigDecimal> tcBudzet = new TableColumn<>("Budzet");
-        TableColumn<EksperimentDto, String> tcPravilaIgre = new TableColumn<>("Pravila igre");
+        TableColumn<EksperimentDto, Integer> tcValutaBudzetaId = new TableColumn<>("Valuta budzeta ID");
+        TableColumn<EksperimentDto, String> tcPravila = new TableColumn<>("Pravila");
+        TableColumn<EksperimentDto, String> tcTrzisniUslovi = new TableColumn<>("Trzisni uslovi");
+        TableColumn<EksperimentDto, String> tcNacinMerenjaRezultata = new TableColumn<>("Nacin merenja rezultata");
 
         tcEksperimentId.setCellValueFactory(new PropertyValueFactory<>("eksperimentId"));
-        tcValutaId.setCellValueFactory(new PropertyValueFactory<>("valutaId"));
         tcNaziv.setCellValueFactory(new PropertyValueFactory<>("naziv"));
-        tcTipEksperimenta.setCellValueFactory(new PropertyValueFactory<>("tipEksperimenta"));
         tcOpis.setCellValueFactory(new PropertyValueFactory<>("opis"));
-        tcBrojUcesnika.setCellValueFactory(new PropertyValueFactory<>("brojUcesnika"));
-        tcCilj.setCellValueFactory(new PropertyValueFactory<>("cilj"));
+        tcCiljIstrazivanja.setCellValueFactory(new PropertyValueFactory<>("ciljIstrazivanja"));
+        tcPredvidjeniBrojUcesnika.setCellValueFactory(new PropertyValueFactory<>("predvidjeniBrojUcesnika"));
         tcBudzet.setCellValueFactory(new PropertyValueFactory<>("budzet"));
-        tcPravilaIgre.setCellValueFactory(new PropertyValueFactory<>("pravilaIgre"));
+        tcValutaBudzetaId.setCellValueFactory(new PropertyValueFactory<>("valutaBudzetaId"));
+        tcValutaBudzetaId.setCellFactory(column -> {
+            TableCell<EksperimentDto, Integer> cell = new TableCell<EksperimentDto, Integer>() {
+                @Override
+                protected void updateItem(Integer item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.toString());
+                    }
+                }
+            };
+
+            cell.setOnMouseClicked(new ShowValutaControl(cell));
+
+            return cell;
+        });
+        tcPravila.setCellValueFactory(new PropertyValueFactory<>("pravila"));
+        tcTrzisniUslovi.setCellValueFactory(new PropertyValueFactory<>("trzisniUslovi"));
+        tcNacinMerenjaRezultata.setCellValueFactory(new PropertyValueFactory<>("nacinMerenjaRezultata"));
 
         super.getColumns().add(tcEksperimentId);
-        super.getColumns().add(tcValutaId);
         super.getColumns().add(tcNaziv);
-        super.getColumns().add(tcTipEksperimenta);
         super.getColumns().add(tcOpis);
-        super.getColumns().add(tcBrojUcesnika);
-        super.getColumns().add(tcCilj);
+        super.getColumns().add(tcCiljIstrazivanja);
+        super.getColumns().add(tcPredvidjeniBrojUcesnika);
         super.getColumns().add(tcBudzet);
-        super.getColumns().add(tcPravilaIgre);
+        super.getColumns().add(tcValutaBudzetaId);
+        super.getColumns().add(tcPravila);
+        super.getColumns().add(tcTrzisniUslovi);
+        super.getColumns().add(tcNacinMerenjaRezultata);
     }
 }

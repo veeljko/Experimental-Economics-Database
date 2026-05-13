@@ -7,7 +7,18 @@ import java.util.List;
 public class SesijaDto {
 
     public static List<SesijaDto> readAll(Connection connection) {
-        String query = "SELECT * FROM Sesija";
+        String query =
+                "SELECT " +
+                        "sesija_id, " +
+                        "izvodjenje_id, " +
+                        "tip_sesije_id, " +
+                        "status_sesije_id, " +
+                        "redni_broj, " +
+                        "datum, " +
+                        "vreme_pocetka, " +
+                        "vreme_zavrsetka, " +
+                        "opis " +
+                        "FROM Sesija";
 
         try {
             Statement statement = connection.createStatement();
@@ -16,26 +27,7 @@ public class SesijaDto {
             List<SesijaDto> sesijaDtos = new ArrayList<>();
 
             while (rs.next()) {
-                int sesijaId = rs.getInt("sesija_id");
-                int izvodjenjeId = rs.getInt("izvodjenje_id");
-                Date datum = rs.getDate("datum");
-                Time vremePocetka = rs.getTime("vreme_pocetka");
-                Time vremeZavrsetka = rs.getTime("vreme_zavrsetka");
-                int brojPrisutnihUcesnika = rs.getInt("broj_prisutnih_ucesnika");
-                int rundaOd = rs.getInt("runda_od");
-                int rundaDo = rs.getInt("runda_do");
-
-                SesijaDto sesijaDto = new SesijaDto(
-                        sesijaId,
-                        izvodjenjeId,
-                        datum,
-                        vremePocetka,
-                        vremeZavrsetka,
-                        brojPrisutnihUcesnika,
-                        rundaOd,
-                        rundaDo
-                );
-
+                SesijaDto sesijaDto = createFromResultSet(rs);
                 sesijaDtos.add(sesijaDto);
             }
 
@@ -50,12 +42,13 @@ public class SesijaDto {
                 "SELECT " +
                         "s.sesija_id, " +
                         "s.izvodjenje_id, " +
+                        "s.tip_sesije_id, " +
+                        "s.status_sesije_id, " +
+                        "s.redni_broj, " +
                         "s.datum, " +
                         "s.vreme_pocetka, " +
                         "s.vreme_zavrsetka, " +
-                        "s.broj_prisutnih_ucesnika, " +
-                        "s.runda_od, " +
-                        "s.runda_do " +
+                        "s.opis " +
                         "FROM Sesija s " +
                         "JOIN Izvodjenje i ON s.izvodjenje_id = i.izvodjenje_id " +
                         "WHERE i.eksperiment_id = ? " +
@@ -70,26 +63,7 @@ public class SesijaDto {
             List<SesijaDto> sesijaDtos = new ArrayList<>();
 
             while (rs.next()) {
-                int sesijaId = rs.getInt("sesija_id");
-                int izvodjenjeId = rs.getInt("izvodjenje_id");
-                Date datum = rs.getDate("datum");
-                Time vremePocetka = rs.getTime("vreme_pocetka");
-                Time vremeZavrsetka = rs.getTime("vreme_zavrsetka");
-                int brojPrisutnihUcesnika = rs.getInt("broj_prisutnih_ucesnika");
-                int rundaOd = rs.getInt("runda_od");
-                int rundaDo = rs.getInt("runda_do");
-
-                SesijaDto sesijaDto = new SesijaDto(
-                        sesijaId,
-                        izvodjenjeId,
-                        datum,
-                        vremePocetka,
-                        vremeZavrsetka,
-                        brojPrisutnihUcesnika,
-                        rundaOd,
-                        rundaDo
-                );
-
+                SesijaDto sesijaDto = createFromResultSet(rs);
                 sesijaDtos.add(sesijaDto);
             }
 
@@ -99,33 +73,60 @@ public class SesijaDto {
         }
     }
 
+    private static SesijaDto createFromResultSet(ResultSet rs) throws SQLException {
+        int sesijaId = rs.getInt("sesija_id");
+        int izvodjenjeId = rs.getInt("izvodjenje_id");
+        int tipSesijeId = rs.getInt("tip_sesije_id");
+        int statusSesijeId = rs.getInt("status_sesije_id");
+        int redniBroj = rs.getInt("redni_broj");
+        Date datum = rs.getDate("datum");
+        Time vremePocetka = rs.getTime("vreme_pocetka");
+        Time vremeZavrsetka = rs.getTime("vreme_zavrsetka");
+        String opis = rs.getString("opis");
+
+        return new SesijaDto(
+                sesijaId,
+                izvodjenjeId,
+                tipSesijeId,
+                statusSesijeId,
+                redniBroj,
+                datum,
+                vremePocetka,
+                vremeZavrsetka,
+                opis
+        );
+    }
+
     private final int sesijaId;
     private final int izvodjenjeId;
+    private final int tipSesijeId;
+    private final int statusSesijeId;
+    private final int redniBroj;
     private final Date datum;
     private final Time vremePocetka;
     private final Time vremeZavrsetka;
-    private final int brojPrisutnihUcesnika;
-    private final int rundaOd;
-    private final int rundaDo;
+    private final String opis;
 
     public SesijaDto(
             int sesijaId,
             int izvodjenjeId,
+            int tipSesijeId,
+            int statusSesijeId,
+            int redniBroj,
             Date datum,
             Time vremePocetka,
             Time vremeZavrsetka,
-            int brojPrisutnihUcesnika,
-            int rundaOd,
-            int rundaDo
+            String opis
     ) {
         this.sesijaId = sesijaId;
         this.izvodjenjeId = izvodjenjeId;
+        this.tipSesijeId = tipSesijeId;
+        this.statusSesijeId = statusSesijeId;
+        this.redniBroj = redniBroj;
         this.datum = datum;
         this.vremePocetka = vremePocetka;
         this.vremeZavrsetka = vremeZavrsetka;
-        this.brojPrisutnihUcesnika = brojPrisutnihUcesnika;
-        this.rundaOd = rundaOd;
-        this.rundaDo = rundaDo;
+        this.opis = opis;
     }
 
     public int getSesijaId() {
@@ -134,6 +135,18 @@ public class SesijaDto {
 
     public int getIzvodjenjeId() {
         return izvodjenjeId;
+    }
+
+    public int getTipSesijeId() {
+        return tipSesijeId;
+    }
+
+    public int getStatusSesijeId() {
+        return statusSesijeId;
+    }
+
+    public int getRedniBroj() {
+        return redniBroj;
     }
 
     public Date getDatum() {
@@ -148,15 +161,7 @@ public class SesijaDto {
         return vremeZavrsetka;
     }
 
-    public int getBrojPrisutnihUcesnika() {
-        return brojPrisutnihUcesnika;
-    }
-
-    public int getRundaOd() {
-        return rundaOd;
-    }
-
-    public int getRundaDo() {
-        return rundaDo;
+    public String getOpis() {
+        return opis;
     }
 }

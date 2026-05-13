@@ -8,10 +8,24 @@ import java.util.List;
 public class EksperimentDto {
 
     public static List<EksperimentDto> loadEksperiment(Connection connection, int izvodjenjeId) {
-        String query = "{CALL get_eksperiment_from_izvodjenjeId(?)}";
+        String query =
+                "SELECT " +
+                        "e.eksperiment_id, " +
+                        "e.naziv, " +
+                        "e.opis, " +
+                        "e.cilj_istrazivanja, " +
+                        "e.predvidjeni_broj_ucesnika, " +
+                        "e.budzet, " +
+                        "e.valuta_budzeta_id, " +
+                        "e.pravila, " +
+                        "e.trzisni_uslovi, " +
+                        "e.nacin_merenja_rezultata " +
+                        "FROM Eksperiment e " +
+                        "JOIN Izvodjenje i ON i.eksperiment_id = e.eksperiment_id " +
+                        "WHERE i.izvodjenje_id = ?";
 
         try {
-            CallableStatement statement = connection.prepareCall(query);
+            PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, izvodjenjeId);
 
             ResultSet rs = statement.executeQuery();
@@ -19,28 +33,7 @@ public class EksperimentDto {
             List<EksperimentDto> eksperimentDtos = new ArrayList<>();
 
             while (rs.next()) {
-                int eksperimentId = rs.getInt("eksperiment_id");
-                int valutaId = rs.getInt("valuta_id");
-                String naziv = rs.getString("naziv");
-                String tipEksperimenta = rs.getString("tip_eksperimenta");
-                String opis = rs.getString("opis");
-                int brojUcesnika = rs.getInt("broj_ucesnika");
-                String cilj = rs.getString("cilj");
-                BigDecimal budzet = rs.getBigDecimal("budzet");
-                String pravilaIgre = rs.getString("pravila_igre");
-
-                EksperimentDto eksperimentDto = new EksperimentDto(
-                        eksperimentId,
-                        valutaId,
-                        naziv,
-                        tipEksperimenta,
-                        opis,
-                        brojUcesnika,
-                        cilj,
-                        budzet,
-                        pravilaIgre
-                );
-
+                EksperimentDto eksperimentDto = createFromResultSet(rs);
                 eksperimentDtos.add(eksperimentDto);
             }
 
@@ -51,7 +44,19 @@ public class EksperimentDto {
     }
 
     public static List<EksperimentDto> loadAll(Connection connection) {
-        String query = "SELECT * FROM eksperiment";
+        String query =
+                "SELECT " +
+                        "eksperiment_id, " +
+                        "naziv, " +
+                        "opis, " +
+                        "cilj_istrazivanja, " +
+                        "predvidjeni_broj_ucesnika, " +
+                        "budzet, " +
+                        "valuta_budzeta_id, " +
+                        "pravila, " +
+                        "trzisni_uslovi, " +
+                        "nacin_merenja_rezultata " +
+                        "FROM Eksperiment";
 
         try {
             Statement statement = connection.createStatement();
@@ -60,28 +65,7 @@ public class EksperimentDto {
             List<EksperimentDto> eksperimentDtos = new ArrayList<>();
 
             while (rs.next()) {
-                int eksperimentId = rs.getInt("eksperiment_id");
-                int valutaId = rs.getInt("valuta_id");
-                String naziv = rs.getString("naziv");
-                String tipEksperimenta = rs.getString("tip_eksperimenta");
-                String opis = rs.getString("opis");
-                int brojUcesnika = rs.getInt("broj_ucesnika");
-                String cilj = rs.getString("cilj");
-                BigDecimal budzet = rs.getBigDecimal("budzet");
-                String pravilaIgre = rs.getString("pravila_igre");
-
-                EksperimentDto eksperimentDto = new EksperimentDto(
-                        eksperimentId,
-                        valutaId,
-                        naziv,
-                        tipEksperimenta,
-                        opis,
-                        brojUcesnika,
-                        cilj,
-                        budzet,
-                        pravilaIgre
-                );
-
+                EksperimentDto eksperimentDto = createFromResultSet(rs);
                 eksperimentDtos.add(eksperimentDto);
             }
 
@@ -91,71 +75,104 @@ public class EksperimentDto {
         }
     }
 
+    private static EksperimentDto createFromResultSet(ResultSet rs) throws SQLException {
+        int eksperimentId = rs.getInt("eksperiment_id");
+        String naziv = rs.getString("naziv");
+        String opis = rs.getString("opis");
+        String ciljIstrazivanja = rs.getString("cilj_istrazivanja");
+        int predvidjeniBrojUcesnika = rs.getInt("predvidjeni_broj_ucesnika");
+        BigDecimal budzet = rs.getBigDecimal("budzet");
+        int valutaBudzetaId = rs.getInt("valuta_budzeta_id");
+        String pravila = rs.getString("pravila");
+        String trzisniUslovi = rs.getString("trzisni_uslovi");
+        String nacinMerenjaRezultata = rs.getString("nacin_merenja_rezultata");
+
+        return new EksperimentDto(
+                eksperimentId,
+                naziv,
+                opis,
+                ciljIstrazivanja,
+                predvidjeniBrojUcesnika,
+                budzet,
+                valutaBudzetaId,
+                pravila,
+                trzisniUslovi,
+                nacinMerenjaRezultata
+        );
+    }
+
     private final int eksperimentId;
-    private final int valutaId;
     private final String naziv;
-    private final String tipEksperimenta;
     private final String opis;
-    private final int brojUcesnika;
-    private final String cilj;
+    private final String ciljIstrazivanja;
+    private final int predvidjeniBrojUcesnika;
     private final BigDecimal budzet;
-    private final String pravilaIgre;
+    private final int valutaBudzetaId;
+    private final String pravila;
+    private final String trzisniUslovi;
+    private final String nacinMerenjaRezultata;
 
     public EksperimentDto(
             int eksperimentId,
-            int valutaId,
             String naziv,
-            String tipEksperimenta,
             String opis,
-            int brojUcesnika,
-            String cilj,
+            String ciljIstrazivanja,
+            int predvidjeniBrojUcesnika,
             BigDecimal budzet,
-            String pravilaIgre
+            int valutaBudzetaId,
+            String pravila,
+            String trzisniUslovi,
+            String nacinMerenjaRezultata
     ) {
         this.eksperimentId = eksperimentId;
-        this.valutaId = valutaId;
         this.naziv = naziv;
-        this.tipEksperimenta = tipEksperimenta;
         this.opis = opis;
-        this.brojUcesnika = brojUcesnika;
-        this.cilj = cilj;
+        this.ciljIstrazivanja = ciljIstrazivanja;
+        this.predvidjeniBrojUcesnika = predvidjeniBrojUcesnika;
         this.budzet = budzet;
-        this.pravilaIgre = pravilaIgre;
+        this.valutaBudzetaId = valutaBudzetaId;
+        this.pravila = pravila;
+        this.trzisniUslovi = trzisniUslovi;
+        this.nacinMerenjaRezultata = nacinMerenjaRezultata;
     }
 
     public int getEksperimentId() {
         return eksperimentId;
     }
 
-    public int getValutaId() {
-        return valutaId;
-    }
-
     public String getNaziv() {
         return naziv;
-    }
-
-    public String getTipEksperimenta() {
-        return tipEksperimenta;
     }
 
     public String getOpis() {
         return opis;
     }
 
-    public int getBrojUcesnika() {
-        return brojUcesnika;
+    public String getCiljIstrazivanja() {
+        return ciljIstrazivanja;
     }
 
-    public String getCilj() {
-        return cilj;
+    public int getPredvidjeniBrojUcesnika() {
+        return predvidjeniBrojUcesnika;
     }
 
     public BigDecimal getBudzet() {
         return budzet;
     }
 
-    public String getPravilaIgre() {
-        return pravilaIgre;
+    public int getValutaBudzetaId() {
+        return valutaBudzetaId;
+    }
+
+    public String getPravila() {
+        return pravila;
+    }
+
+    public String getTrzisniUslovi() {
+        return trzisniUslovi;
+    }
+
+    public String getNacinMerenjaRezultata() {
+        return nacinMerenjaRezultata;
     }
 }
