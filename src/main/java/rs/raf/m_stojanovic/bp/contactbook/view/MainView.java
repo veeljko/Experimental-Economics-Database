@@ -19,6 +19,15 @@ import javafx.scene.layout.Priority;
 import javafx.scene.control.ScrollPane;
 import rs.raf.m_stojanovic.bp.contactbook.model.*;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.*;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Priority;
+import rs.raf.m_stojanovic.bp.contactbook.controller.ShowIstrazivacDetailsControl;
+import rs.raf.m_stojanovic.bp.contactbook.model.IstrazivacDto;
+import rs.raf.m_stojanovic.bp.contactbook.model.EksperimentDizajnerDto;
+import rs.raf.m_stojanovic.bp.contactbook.model.IzvodjenjeIzvodjacDto;
+import rs.raf.m_stojanovic.bp.contactbook.view.tables.IstrazivacTable;
+import rs.raf.m_stojanovic.bp.contactbook.view.tables.EksperimentDizajnerTable;
+import rs.raf.m_stojanovic.bp.contactbook.view.tables.IzvodjenjeIzvodjacTable;
 
 public class MainView extends Stage {
 
@@ -39,24 +48,22 @@ public class MainView extends Stage {
     private final TableView<TipAlataEksperimentDto> tipoviAlataEksperimentaTable =
             new TipAlataEksperimentTable(new java.util.ArrayList<>());
 
+    private final TableView<IstrazivacDto> istrazivaciTable =
+            new IstrazivacTable(IstrazivacDto.loadAll(Config.getConnection()));
+
+    private final TableView<EksperimentDizajnerDto> eksperimentiKaoDizajnerTable =
+            new EksperimentDizajnerTable(new java.util.ArrayList<>());
+
+    private final TableView<IzvodjenjeIzvodjacDto> izvodjenjaKaoIzvodjacTable =
+            new IzvodjenjeIzvodjacTable(new java.util.ArrayList<>());
+
+    private final VBox istrazivaciDetailsBox = new VBox(10);
+
     private final VBox detailsBox = new VBox(10);
     private final HBox showEksperimenti = new HBox();
     private final HBox showLaboratorije = new HBox();
     private final HBox showIstrazivaci = new HBox();
 
-    private final TextField tfFirstName
-            = new TextField();
-    private final TextField tfLastName
-            = new TextField();
-    private final Button btAdd
-            = new Button("Add Contact");
-
-    private final TextField tfValue
-            = new TextField();
-    private final Button btAddEmailAddress
-            = new Button("Add Email Address");
-    private final Button btAddPhoneNumber
-            = new Button("Add Phone Number");
 
     public MainView() {
         this.eksperimentTable.setOnMouseClicked(new ShowSesijeControl(
@@ -105,11 +112,46 @@ public class MainView extends Stage {
 
         showEksperimenti.getChildren().addAll(eksperimentTable, detailsScrollPane);
 
+        this.istrazivaciTable.setOnMouseClicked(new ShowIstrazivacDetailsControl(
+                this.eksperimentiKaoDizajnerTable,
+                this.izvodjenjaKaoIzvodjacTable,
+                this.istrazivaciTable
+        ));
+
+        setupIstrazivaciView();
+
         this.root.setCenter(this.showEksperimenti);
         this.root.setLeft(this.gridWest());
         this.root.setTop(this.horizontalBoxNorth());
-
         super.setScene(new Scene(this.root, 1500, 850));
+    }
+
+    private void setupIstrazivaciView() {
+        showIstrazivaci.setAlignment(Pos.CENTER);
+        showIstrazivaci.setSpacing(10);
+        showIstrazivaci.setPadding(new Insets(10));
+
+        istrazivaciTable.setPrefWidth(650);
+
+        eksperimentiKaoDizajnerTable.setPrefHeight(300);
+        izvodjenjaKaoIzvodjacTable.setPrefHeight(300);
+
+        istrazivaciDetailsBox.setPadding(new Insets(10));
+        istrazivaciDetailsBox.getChildren().addAll(
+                new Label("Eksperimenti u kojima je istrazivac bio dizajner"),
+                eksperimentiKaoDizajnerTable,
+                new Label("Izvodjenja u kojima je istrazivac bio izvodjac"),
+                izvodjenjaKaoIzvodjacTable
+        );
+
+        ScrollPane detailsScrollPane = new ScrollPane(istrazivaciDetailsBox);
+        detailsScrollPane.setFitToWidth(true);
+        detailsScrollPane.setPrefWidth(900);
+
+        HBox.setHgrow(istrazivaciTable, Priority.ALWAYS);
+        HBox.setHgrow(detailsScrollPane, Priority.ALWAYS);
+
+        showIstrazivaci.getChildren().addAll(istrazivaciTable, detailsScrollPane);
     }
 
     private HBox horizontalBoxNorth() {
