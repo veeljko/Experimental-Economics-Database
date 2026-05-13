@@ -3,6 +3,7 @@ package rs.raf.m_stojanovic.bp.contactbook.controller;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import rs.raf.m_stojanovic.bp.contactbook.view.MainView;
 import rs.raf.m_stojanovic.bp.contactbook.view.forms.Login;
 
 import java.io.BufferedReader;
@@ -53,6 +54,9 @@ public class LoginController {
                 alert.setTitle("Info");
                 alert.setHeaderText(null);
                 alert.showAndWait();
+                MainView mw = new MainView();
+                mw.show();
+                this.stage.close();
             }
             else{
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Neuspesno Logovanje");
