@@ -12,22 +12,17 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import rs.raf.m_stojanovic.bp.contactbook.Config;
-import rs.raf.m_stojanovic.bp.contactbook.controller.AddContactControl;
-import rs.raf.m_stojanovic.bp.contactbook.controller.AddDetailControl;
-import rs.raf.m_stojanovic.bp.contactbook.controller.ShowContactDetailsControl;
-import rs.raf.m_stojanovic.bp.contactbook.model.ContactDto;
-import rs.raf.m_stojanovic.bp.contactbook.model.DetailDto;
-import rs.raf.m_stojanovic.bp.contactbook.view.tables.ContactTable;
-import rs.raf.m_stojanovic.bp.contactbook.view.tables.DetailTable;
+import rs.raf.m_stojanovic.bp.contactbook.controller.ShowSesijeControl;
+import rs.raf.m_stojanovic.bp.contactbook.model.EksperimentDto;
+import rs.raf.m_stojanovic.bp.contactbook.model.SesijaDto;
+import rs.raf.m_stojanovic.bp.contactbook.view.tables.EksperimentTable;
+import rs.raf.m_stojanovic.bp.contactbook.view.tables.SesijaTable;
 
 public class MainView extends Stage {
 
     private final BorderPane root = new BorderPane();
-
-    private final TableView<ContactDto> tvContacts
-            = new ContactTable(ContactDto.readAll(Config.getConnection()));
-    private final TableView<DetailDto> tvDetails
-            = new DetailTable();
+    private final TableView<EksperimentDto> eksperimentTable = new EksperimentTable(EksperimentDto.loadAll(Config.getConnection()));
+    private final TableView<SesijaDto> sesijeTable = new SesijaTable(new java.util.ArrayList<>());
 
     private final TextField tfFirstName
             = new TextField();
@@ -44,18 +39,12 @@ public class MainView extends Stage {
             = new Button("Add Phone Number");
 
     public MainView() {
-        this.tvContacts.setOnMouseClicked(new ShowContactDetailsControl(
-                this.tvContacts, this.tvDetails));
-        this.btAdd.setOnAction(new AddContactControl(
-                this.tfFirstName, this.tfLastName, this.tvContacts));
-        this.btAddEmailAddress.setOnAction(new AddDetailControl(
-                "email address", this.tfValue, this.tvContacts, this.tvDetails));
-        this.btAddPhoneNumber.setOnAction(new AddDetailControl(
-                "phone number", this.tfValue, this.tvContacts, this.tvDetails));
+        this.eksperimentTable.setOnMouseClicked(new ShowSesijeControl(
+                this.sesijeTable, this.eksperimentTable));
 
-        this.root.setCenter(this.tvContacts);
+        this.root.setCenter(this.eksperimentTable);
         this.root.setLeft(this.gridWest());
-        this.root.setRight(this.tvDetails);
+        this.root.setRight(this.sesijeTable);
         this.root.setTop(this.horizontalBoxNorth());
 
         super.setScene(new Scene(this.root));
@@ -71,13 +60,13 @@ public class MainView extends Stage {
 
     private GridPane gridWest() {
         GridPane gridPane = new GridPane();
-        gridPane.addRow(0, new Label("First Name:"), this.tfFirstName);
-        gridPane.addRow(1, new Label("Last Name:"), this.tfLastName);
-        gridPane.add(this.btAdd, 1, 2);
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setPadding(new Insets(10));
-        gridPane.setVgap(10);
-        gridPane.setHgap(10);
+//        gridPane.addRow(0, new Label("First Name:"), this.tfFirstName);
+//        gridPane.addRow(1, new Label("Last Name:"), this.tfLastName);
+//        gridPane.add(this.btAdd, 1, 2);
+//        gridPane.setAlignment(Pos.CENTER);
+//        gridPane.setPadding(new Insets(10));
+//        gridPane.setVgap(10);
+//        gridPane.setHgap(10);
         return gridPane;
     }
 

@@ -10,7 +10,9 @@ import rs.raf.m_stojanovic.bp.contactbook.view.forms.Login;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        LoginController loginController = new LoginController(primaryStage);
-        loginController.show();
+//        LoginController loginController = new LoginController(primaryStage);
+//        loginController.show();
+        MainView mw = new MainView();
+        mw.show();
     }
 }
