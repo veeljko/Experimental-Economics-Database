@@ -5,30 +5,62 @@ import javafx.event.EventHandler;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import rs.raf.m_stojanovic.bp.contactbook.Config;
-import rs.raf.m_stojanovic.bp.contactbook.model.EksperimentDto;
-import rs.raf.m_stojanovic.bp.contactbook.model.SesijaDto;
-
-import java.util.List;
+import rs.raf.m_stojanovic.bp.contactbook.model.*;
 
 public class ShowSesijeControl implements EventHandler<MouseEvent> {
-    private final TableView<SesijaDto> sesijaTable;
+
+    private final TableView<SesijaDto> sesijeTable;
+    private final TableView<DizajnerEksperimentDto> dizajneriEksperimentaTable;
+    private final TableView<ResursEksperimentDto> resursiEksperimentaTable;
+    private final TableView<TeorijaEksperimentDto> teorijeEksperimentaTable;
+    private final TableView<TipAlataEksperimentDto> tipoviAlataEksperimentaTable;
     private final TableView<EksperimentDto> eksperimentTable;
 
-    public ShowSesijeControl(TableView<SesijaDto> sesijaTable, TableView<EksperimentDto> eksperimentTable) {
-        this.sesijaTable = sesijaTable;
+    public ShowSesijeControl(
+            TableView<SesijaDto> sesijeTable,
+            TableView<DizajnerEksperimentDto> dizajneriEksperimentaTable,
+            TableView<ResursEksperimentDto> resursiEksperimentaTable,
+            TableView<TeorijaEksperimentDto> teorijeEksperimentaTable,
+            TableView<TipAlataEksperimentDto> tipoviAlataEksperimentaTable,
+            TableView<EksperimentDto> eksperimentTable
+    ) {
+        this.sesijeTable = sesijeTable;
+        this.dizajneriEksperimentaTable = dizajneriEksperimentaTable;
+        this.resursiEksperimentaTable = resursiEksperimentaTable;
+        this.teorijeEksperimentaTable = teorijeEksperimentaTable;
+        this.tipoviAlataEksperimentaTable = tipoviAlataEksperimentaTable;
         this.eksperimentTable = eksperimentTable;
     }
 
     @Override
     public void handle(MouseEvent event) {
-        if (event.getClickCount() == 1) {
-            EksperimentDto eksperimentDto = this.eksperimentTable.getSelectionModel().getSelectedItem();
-            if (eksperimentDto == null)
-                return;
-            int eksperimentId = eksperimentDto.getEksperimentId();
-            List<SesijaDto> sesijaDtos = SesijaDto.readByEksperimentId(Config.getConnection(), eksperimentId);
+        EksperimentDto selectedEksperiment =
+                this.eksperimentTable.getSelectionModel().getSelectedItem();
 
-            this.sesijaTable.setItems(FXCollections.observableArrayList(sesijaDtos));
+        if (selectedEksperiment == null) {
+            return;
         }
+
+        int eksperimentId = selectedEksperiment.getEksperimentId();
+
+        this.sesijeTable.setItems(FXCollections.observableArrayList(
+                SesijaDto.readByEksperimentId(Config.getConnection(), eksperimentId)
+        ));
+
+        this.dizajneriEksperimentaTable.setItems(FXCollections.observableArrayList(
+                DizajnerEksperimentDto.loadByEksperimentId(Config.getConnection(), eksperimentId)
+        ));
+
+        this.resursiEksperimentaTable.setItems(FXCollections.observableArrayList(
+                ResursEksperimentDto.loadByEksperimentId(Config.getConnection(), eksperimentId)
+        ));
+
+        this.teorijeEksperimentaTable.setItems(FXCollections.observableArrayList(
+                TeorijaEksperimentDto.loadByEksperimentId(Config.getConnection(), eksperimentId)
+        ));
+
+        this.tipoviAlataEksperimentaTable.setItems(FXCollections.observableArrayList(
+                TipAlataEksperimentDto.loadByEksperimentId(Config.getConnection(), eksperimentId)
+        ));
     }
 }

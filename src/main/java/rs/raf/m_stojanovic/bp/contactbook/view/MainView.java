@@ -15,12 +15,31 @@ import rs.raf.m_stojanovic.bp.contactbook.model.EksperimentDto;
 import rs.raf.m_stojanovic.bp.contactbook.model.SesijaDto;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.EksperimentTable;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.SesijaTable;
+import javafx.scene.layout.Priority;
+import javafx.scene.control.ScrollPane;
+import rs.raf.m_stojanovic.bp.contactbook.model.*;
+import rs.raf.m_stojanovic.bp.contactbook.view.tables.*;
 
 public class MainView extends Stage {
 
     private final BorderPane root = new BorderPane();
     private final TableView<EksperimentDto> eksperimentTable = new EksperimentTable(EksperimentDto.loadAll(Config.getConnection()));
-    private final TableView<SesijaDto> sesijeTable = new SesijaTable(new java.util.ArrayList<>());
+    private final TableView<SesijaDto> sesijeTable =
+            new SesijaTable(new java.util.ArrayList<>());
+
+    private final TableView<DizajnerEksperimentDto> dizajneriEksperimentaTable =
+            new DizajnerEksperimentTable(new java.util.ArrayList<>());
+
+    private final TableView<ResursEksperimentDto> resursiEksperimentaTable =
+            new ResursEksperimentTable(new java.util.ArrayList<>());
+
+    private final TableView<TeorijaEksperimentDto> teorijeEksperimentaTable =
+            new TeorijaEksperimentTable(new java.util.ArrayList<>());
+
+    private final TableView<TipAlataEksperimentDto> tipoviAlataEksperimentaTable =
+            new TipAlataEksperimentTable(new java.util.ArrayList<>());
+
+    private final VBox detailsBox = new VBox(10);
     private final HBox showEksperimenti = new HBox();
     private final HBox showLaboratorije = new HBox();
     private final HBox showIstrazivaci = new HBox();
@@ -41,7 +60,13 @@ public class MainView extends Stage {
 
     public MainView() {
         this.eksperimentTable.setOnMouseClicked(new ShowSesijeControl(
-                this.sesijeTable, this.eksperimentTable));
+                this.sesijeTable,
+                this.dizajneriEksperimentaTable,
+                this.resursiEksperimentaTable,
+                this.teorijeEksperimentaTable,
+                this.tipoviAlataEksperimentaTable,
+                this.eksperimentTable
+        ));
 
         showEksperimenti.setAlignment(Pos.CENTER);
         showLaboratorije.setAlignment(Pos.CENTER);
@@ -51,17 +76,40 @@ public class MainView extends Stage {
         showLaboratorije.setSpacing(10);
         showIstrazivaci.setSpacing(10);
 
-        showEksperimenti.getChildren().addAll(eksperimentTable, sesijeTable);
+        this.sesijeTable.setPrefHeight(180);
+        this.dizajneriEksperimentaTable.setPrefHeight(180);
+        this.resursiEksperimentaTable.setPrefHeight(180);
+        this.teorijeEksperimentaTable.setPrefHeight(180);
+        this.tipoviAlataEksperimentaTable.setPrefHeight(180);
 
-        // Za sada placeholder-i, kasnije ovde dodaj svoje tabele.
-        showIstrazivaci.getChildren().add(new Label("Ovde ce biti prikaz istrazivaca"));
-        showLaboratorije.getChildren().add(new Label("Ovde ce biti prikaz laboratorija"));
+        detailsBox.setPadding(new Insets(10));
+        detailsBox.getChildren().addAll(
+                new Label("Sesije za izabrani eksperiment"),
+                sesijeTable,
+                new Label("Dizajneri za izabrani eksperiment"),
+                dizajneriEksperimentaTable,
+                new Label("Resursi za izabrani eksperiment"),
+                resursiEksperimentaTable,
+                new Label("Teorije za izabrani eksperiment"),
+                teorijeEksperimentaTable,
+                new Label("Tipovi alata za izabrani eksperiment"),
+                tipoviAlataEksperimentaTable
+        );
+
+        ScrollPane detailsScrollPane = new ScrollPane(detailsBox);
+        detailsScrollPane.setFitToWidth(true);
+        detailsScrollPane.setPrefWidth(900);
+
+        HBox.setHgrow(detailsScrollPane, Priority.ALWAYS);
+        HBox.setHgrow(eksperimentTable, Priority.ALWAYS);
+
+        showEksperimenti.getChildren().addAll(eksperimentTable, detailsScrollPane);
 
         this.root.setCenter(this.showEksperimenti);
         this.root.setLeft(this.gridWest());
         this.root.setTop(this.horizontalBoxNorth());
 
-        super.setScene(new Scene(this.root));
+        super.setScene(new Scene(this.root, 1500, 850));
     }
 
     private HBox horizontalBoxNorth() {
