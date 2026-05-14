@@ -8,13 +8,7 @@ public class ValutaDto {
 
     public static List<ValutaDto> loadById(Connection connection, int valutaId) {
         String query =
-                "SELECT " +
-                        "valuta_id, " +
-                        "sifra, " +
-                        "naziv, " +
-                        "simbol " +
-                        "FROM Valuta " +
-                        "WHERE valuta_id = ?";
+                "SELECT * FROM Valuta WHERE valuta_id = ?";
 
         try {
             PreparedStatement statement = connection.prepareStatement(query);

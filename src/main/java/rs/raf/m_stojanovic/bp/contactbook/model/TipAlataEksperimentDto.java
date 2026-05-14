@@ -17,8 +17,7 @@ public class TipAlataEksperimentDto {
                         "eta.napomena " +
                         "FROM Eksperiment_Tip_Alata eta " +
                         "JOIN Tip_Alata ta ON eta.tip_alata_id = ta.tip_alata_id " +
-                        "WHERE eta.eksperiment_id = ? " +
-                        "ORDER BY ta.naziv";
+                        "WHERE eta.eksperiment_id = ? ";
 
         try {
             PreparedStatement statement = connection.prepareStatement(query);

@@ -9,18 +9,7 @@ public class EksperimentDizajnerDto {
 
     public static List<EksperimentDizajnerDto> loadByIstrazivacId(Connection connection, int istrazivacId) {
         String query =
-                "SELECT " +
-                        "e.eksperiment_id, " +
-                        "e.naziv, " +
-                        "e.opis, " +
-                        "e.cilj_istrazivanja, " +
-                        "e.predvidjeni_broj_ucesnika, " +
-                        "e.budzet, " +
-                        "e.valuta_budzeta_id, " +
-                        "e.pravila, " +
-                        "e.trzisni_uslovi, " +
-                        "e.nacin_merenja_rezultata, " +
-                        "de.opis_zaduzenja " +
+                "SELECT * " +
                         "FROM Dizajner_Eksperiment de " +
                         "JOIN Eksperiment e ON de.eksperiment_id = e.eksperiment_id " +
                         "WHERE de.istrazivac_id = ? " +

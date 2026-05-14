@@ -8,17 +8,7 @@ public class TeorijaEksperimentDto {
 
     public static List<TeorijaEksperimentDto> loadByEksperimentId(Connection connection, int eksperimentId) {
         String query =
-                "SELECT " +
-                        "t.teorija_id, " +
-                        "t.naziv, " +
-                        "t.identifikacioni_podaci, " +
-                        "t.oblast, " +
-                        "t.opis, " +
-                        "et.uloga_teorije " +
-                        "FROM Eksperiment_Teorija et " +
-                        "JOIN Teorija t ON et.teorija_id = t.teorija_id " +
-                        "WHERE et.eksperiment_id = ? " +
-                        "ORDER BY t.oblast, t.naziv";
+                "SELECT * FROM Eksperiment_Teorija et JOIN Teorija t ON et.teorija_id = t.teorija_id WHERE et.eksperiment_id = ? ";
 
         try {
             PreparedStatement statement = connection.prepareStatement(query);

@@ -8,12 +8,7 @@ public class TipLaboratorijeDto {
 
     public static List<TipLaboratorijeDto> loadById(Connection connection, int tipLabId) {
         String query =
-                "SELECT " +
-                        "tip_lab_id, " +
-                        "naziv, " +
-                        "opis " +
-                        "FROM Tip_Laboratorije " +
-                        "WHERE tip_lab_id = ?";
+                "SELECT * FROM Tip_Laboratorije WHERE tip_lab_id = ?";
 
         try {
             PreparedStatement statement = connection.prepareStatement(query);

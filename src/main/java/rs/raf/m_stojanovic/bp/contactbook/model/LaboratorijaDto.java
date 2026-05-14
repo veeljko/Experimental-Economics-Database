@@ -7,16 +7,7 @@ import java.util.List;
 public class LaboratorijaDto {
 
     public static List<LaboratorijaDto> loadAll(Connection connection) {
-        String query =
-                "SELECT " +
-                        "lab_id, " +
-                        "tip_lab_id, " +
-                        "naziv, " +
-                        "opis_lokacije, " +
-                        "kapacitet, " +
-                        "tehnicki_uslovi " +
-                        "FROM Laboratorija " +
-                        "ORDER BY lab_id";
+        String query = "SELECT * FROM Laboratorija";
 
         try {
             Statement statement = connection.createStatement();
@@ -35,16 +26,7 @@ public class LaboratorijaDto {
     }
 
     public static List<LaboratorijaDto> loadById(Connection connection, int labId) {
-        String query =
-                "SELECT " +
-                        "lab_id, " +
-                        "tip_lab_id, " +
-                        "naziv, " +
-                        "opis_lokacije, " +
-                        "kapacitet, " +
-                        "tehnicki_uslovi " +
-                        "FROM Laboratorija " +
-                        "WHERE lab_id = ?";
+        String query = "SELECT * FROM Laboratorija WHERE lab_id = ?";
 
         try {
             PreparedStatement statement = connection.prepareStatement(query);
@@ -66,13 +48,7 @@ public class LaboratorijaDto {
 
     public static List<LaboratorijaDto> loadBySesijaId(Connection connection, int sesijaId) {
         String query =
-                "SELECT " +
-                        "l.lab_id, " +
-                        "l.tip_lab_id, " +
-                        "l.naziv, " +
-                        "l.opis_lokacije, " +
-                        "l.kapacitet, " +
-                        "l.tehnicki_uslovi " +
+                "SELECT *" +
                         "FROM Sesija s " +
                         "JOIN Izvodjenje i ON s.izvodjenje_id = i.izvodjenje_id " +
                         "JOIN Laboratorija l ON i.lab_id = l.lab_id " +

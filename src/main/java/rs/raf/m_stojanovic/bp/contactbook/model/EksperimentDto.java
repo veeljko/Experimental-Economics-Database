@@ -9,17 +9,7 @@ public class EksperimentDto {
 
     public static List<EksperimentDto> loadEksperiment(Connection connection, int izvodjenjeId) {
         String query =
-                "SELECT " +
-                        "e.eksperiment_id, " +
-                        "e.naziv, " +
-                        "e.opis, " +
-                        "e.cilj_istrazivanja, " +
-                        "e.predvidjeni_broj_ucesnika, " +
-                        "e.budzet, " +
-                        "e.valuta_budzeta_id, " +
-                        "e.pravila, " +
-                        "e.trzisni_uslovi, " +
-                        "e.nacin_merenja_rezultata " +
+                "SELECT *" +
                         "FROM Eksperiment e " +
                         "JOIN Izvodjenje i ON i.eksperiment_id = e.eksperiment_id " +
                         "WHERE i.izvodjenje_id = ?";
@@ -45,18 +35,7 @@ public class EksperimentDto {
 
     public static List<EksperimentDto> loadAll(Connection connection) {
         String query =
-                "SELECT " +
-                        "eksperiment_id, " +
-                        "naziv, " +
-                        "opis, " +
-                        "cilj_istrazivanja, " +
-                        "predvidjeni_broj_ucesnika, " +
-                        "budzet, " +
-                        "valuta_budzeta_id, " +
-                        "pravila, " +
-                        "trzisni_uslovi, " +
-                        "nacin_merenja_rezultata " +
-                        "FROM Eksperiment";
+                "SELECT * FROM Eksperiment";
 
         try {
             Statement statement = connection.createStatement();
@@ -103,17 +82,7 @@ public class EksperimentDto {
 
     public static List<EksperimentDto> loadBySesijaId(Connection connection, int sesijaId) {
         String query =
-                "SELECT " +
-                        "e.eksperiment_id, " +
-                        "e.naziv, " +
-                        "e.opis, " +
-                        "e.cilj_istrazivanja, " +
-                        "e.predvidjeni_broj_ucesnika, " +
-                        "e.budzet, " +
-                        "e.valuta_budzeta_id, " +
-                        "e.pravila, " +
-                        "e.trzisni_uslovi, " +
-                        "e.nacin_merenja_rezultata " +
+                "SELECT *" +
                         "FROM Sesija s " +
                         "JOIN Izvodjenje i ON s.izvodjenje_id = i.izvodjenje_id " +
                         "JOIN Eksperiment e ON i.eksperiment_id = e.eksperiment_id " +

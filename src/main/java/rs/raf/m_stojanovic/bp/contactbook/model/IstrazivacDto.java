@@ -7,17 +7,7 @@ import java.util.List;
 public class IstrazivacDto {
 
     public static List<IstrazivacDto> loadAll(Connection connection) {
-        String query =
-                "SELECT " +
-                        "istrazivac_id, " +
-                        "ime, " +
-                        "prezime, " +
-                        "email, " +
-                        "institucija, " +
-                        "kvalifikacije, " +
-                        "sposobnosti " +
-                        "FROM Istrazivac " +
-                        "ORDER BY prezime, ime";
+        String query = "SELECT * FROM Istrazivac ORDER BY prezime, ime";
 
         try {
             Statement statement = connection.createStatement();

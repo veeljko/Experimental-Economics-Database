@@ -8,17 +8,7 @@ public class SesijaDto {
 
     public static List<SesijaDto> readAll(Connection connection) {
         String query =
-                "SELECT " +
-                        "sesija_id, " +
-                        "izvodjenje_id, " +
-                        "tip_sesije_id, " +
-                        "status_sesije_id, " +
-                        "redni_broj, " +
-                        "datum, " +
-                        "vreme_pocetka, " +
-                        "vreme_zavrsetka, " +
-                        "opis " +
-                        "FROM Sesija";
+                "SELECT * FROM Sesija";
 
         try {
             Statement statement = connection.createStatement();
@@ -39,20 +29,10 @@ public class SesijaDto {
 
     public static List<SesijaDto> readByEksperimentId(Connection connection, int eksperimentId) {
         String query =
-                "SELECT " +
-                        "s.sesija_id, " +
-                        "s.izvodjenje_id, " +
-                        "s.tip_sesije_id, " +
-                        "s.status_sesije_id, " +
-                        "s.redni_broj, " +
-                        "s.datum, " +
-                        "s.vreme_pocetka, " +
-                        "s.vreme_zavrsetka, " +
-                        "s.opis " +
+                "SELECT *" +
                         "FROM Sesija s " +
                         "JOIN Izvodjenje i ON s.izvodjenje_id = i.izvodjenje_id " +
-                        "WHERE i.eksperiment_id = ? " +
-                        "ORDER BY s.datum, s.vreme_pocetka";
+                        "WHERE i.eksperiment_id = ? ";
 
         try {
             PreparedStatement statement = connection.prepareStatement(query);

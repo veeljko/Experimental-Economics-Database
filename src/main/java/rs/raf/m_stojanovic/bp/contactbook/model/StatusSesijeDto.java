@@ -8,12 +8,7 @@ public class StatusSesijeDto {
 
     public static List<StatusSesijeDto> loadById(Connection connection, int statusSesijeId) {
         String query =
-                "SELECT " +
-                        "status_sesije_id, " +
-                        "naziv, " +
-                        "opis " +
-                        "FROM Status_Sesije " +
-                        "WHERE status_sesije_id = ?";
+                "SELECT * FROM Status_Sesije WHERE status_sesije_id = ?";
 
         try {
             PreparedStatement statement = connection.prepareStatement(query);

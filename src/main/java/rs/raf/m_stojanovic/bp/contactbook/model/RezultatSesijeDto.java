@@ -9,16 +9,7 @@ public class RezultatSesijeDto {
 
     public static List<RezultatSesijeDto> loadBySesijaId(Connection connection, int sesijaId) {
         String query =
-                "SELECT " +
-                        "rezultat_id, " +
-                        "sesija_id, " +
-                        "naziv_metrike, " +
-                        "vrednost, " +
-                        "jedinica_mere, " +
-                        "opis " +
-                        "FROM Rezultat_Sesije " +
-                        "WHERE sesija_id = ? " +
-                        "ORDER BY rezultat_id";
+                "SELECT * FROM Rezultat_Sesije WHERE sesija_id = ?";
 
         try {
             PreparedStatement statement = connection.prepareStatement(query);

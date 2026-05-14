@@ -8,18 +8,7 @@ import java.util.List;
 public class IzvodjenjeDto {
 
     public static List<IzvodjenjeDto> loadById(Connection connection, int izvodjenjeId) {
-        String query =
-                "SELECT " +
-                        "izvodjenje_id, " +
-                        "eksperiment_id, " +
-                        "lab_id, " +
-                        "datum, " +
-                        "status_izvodjenja_id, " +
-                        "broj_rundi, " +
-                        "pocetni_kapital_ucesnika, " +
-                        "valuta_id " +
-                        "FROM Izvodjenje " +
-                        "WHERE izvodjenje_id = ?";
+        String query = "SELECT * FROM Izvodjenje WHERE izvodjenje_id = ?";
 
         try {
             PreparedStatement statement = connection.prepareStatement(query);
