@@ -97,6 +97,53 @@ public class SesijaDto {
         );
     }
 
+    public static void updateZakazanaSesija(
+            Connection connection,
+            int sesijaId,
+            int tipSesijeId,
+            int statusSesijeId,
+            int redniBroj,
+            Date datum,
+            Time vremePocetka,
+            Time vremeZavrsetka,
+            String opis
+    ) {
+        String query =
+                "UPDATE Sesija " +
+                        "SET " +
+                        "tip_sesije_id = ?, " +
+                        "status_sesije_id = ?, " +
+                        "redni_broj = ?, " +
+                        "datum = ?, " +
+                        "vreme_pocetka = ?, " +
+                        "vreme_zavrsetka = ?, " +
+                        "opis = ? " +
+                        "WHERE sesija_id = ? ";
+//                        "AND status_sesije_id = 1";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, tipSesijeId);
+            statement.setInt(2, statusSesijeId);
+            statement.setInt(3, redniBroj);
+            statement.setDate(4, datum);
+            statement.setTime(5, vremePocetka);
+            statement.setTime(6, vremeZavrsetka);
+            statement.setString(7, opis);
+            statement.setInt(8, sesijaId);
+
+//            int rowsAffected = statement.executeUpdate();
+
+//            if (rowsAffected == 0) {
+//                throw new RuntimeException("Sesija nije izmenjena. Mogu se menjati samo zakazane sesije.");
+//            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private final int sesijaId;
     private final int izvodjenjeId;
     private final int tipSesijeId;

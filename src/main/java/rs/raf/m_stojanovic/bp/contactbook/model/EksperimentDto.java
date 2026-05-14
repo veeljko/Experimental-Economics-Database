@@ -101,6 +101,43 @@ public class EksperimentDto {
         );
     }
 
+    public static List<EksperimentDto> loadBySesijaId(Connection connection, int sesijaId) {
+        String query =
+                "SELECT " +
+                        "e.eksperiment_id, " +
+                        "e.naziv, " +
+                        "e.opis, " +
+                        "e.cilj_istrazivanja, " +
+                        "e.predvidjeni_broj_ucesnika, " +
+                        "e.budzet, " +
+                        "e.valuta_budzeta_id, " +
+                        "e.pravila, " +
+                        "e.trzisni_uslovi, " +
+                        "e.nacin_merenja_rezultata " +
+                        "FROM Sesija s " +
+                        "JOIN Izvodjenje i ON s.izvodjenje_id = i.izvodjenje_id " +
+                        "JOIN Eksperiment e ON i.eksperiment_id = e.eksperiment_id " +
+                        "WHERE s.sesija_id = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, sesijaId);
+
+            ResultSet rs = statement.executeQuery();
+
+            List<EksperimentDto> eksperimentDtos = new ArrayList<>();
+
+            while (rs.next()) {
+                EksperimentDto eksperimentDto = createFromResultSet(rs);
+                eksperimentDtos.add(eksperimentDto);
+            }
+
+            return eksperimentDtos;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private final int eksperimentId;
     private final String naziv;
     private final String opis;

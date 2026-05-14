@@ -35,6 +35,8 @@ import rs.raf.m_stojanovic.bp.contactbook.model.AlatLaboratorijaDto;
 import rs.raf.m_stojanovic.bp.contactbook.model.ResursLaboratorijaDto;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.AlatLaboratorijaTable;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.ResursLaboratorijaTable;
+import rs.raf.m_stojanovic.bp.contactbook.controller.ShowPregledSesijeDetailsControl;
+import rs.raf.m_stojanovic.bp.contactbook.controller.EditZakazanaSesijaControl;
 
 public class MainView extends Stage {
 
@@ -71,6 +73,38 @@ public class MainView extends Stage {
 
     private final TableView<AlatLaboratorijaDto> alatiLaboratorijeTable =
             new AlatLaboratorijaTable(new java.util.ArrayList<>());
+    private final HBox showPregledSesija = new HBox();
+
+    private final TableView<SesijaDto> sveSesijeTable =
+            new SesijaTable(SesijaDto.readAll(Config.getConnection()));
+
+    private final TableView<EksperimentDto> sesijaEksperimentTable =
+            new EksperimentTable(new java.util.ArrayList<>());
+
+    private final TableView<IzvodjenjeDto> sesijaIzvodjenjeTable =
+            new IzvodjenjeTable(new java.util.ArrayList<>());
+
+    private final TableView<LaboratorijaDto> sesijaLaboratorijaTable =
+            new LaboratorijaTable(new java.util.ArrayList<>());
+
+    private final TableView<TipSesijeDto> sesijaTipSesijeTable =
+            new TipSesijeTable(new java.util.ArrayList<>());
+
+    private final TableView<StatusSesijeDto> sesijaStatusSesijeTable =
+            new StatusSesijeTable(new java.util.ArrayList<>());
+
+    private final TableView<SesijaResursDetaljiDto> sesijaResursiTable =
+            new SesijaResursDetaljiTable(new java.util.ArrayList<>());
+
+    private final TableView<SesijaAlatDetaljiDto> sesijaAlatiTable =
+            new SesijaAlatDetaljiTable(new java.util.ArrayList<>());
+
+    private final TableView<RezultatSesijeDto> rezultatiSesijeTable =
+            new RezultatSesijeTable(new java.util.ArrayList<>());
+
+    private final Button btEditSesija = new Button("EDIT");
+
+    private final VBox pregledSesijaDetailsBox = new VBox(10);
 
     private final VBox laboratorijeDetailsBox = new VBox(10);
 
@@ -145,10 +179,72 @@ public class MainView extends Stage {
 
         setupLaboratorijeView();
 
+        this.sveSesijeTable.setOnMouseClicked(new ShowPregledSesijeDetailsControl(
+                this.sveSesijeTable,
+                this.sesijaEksperimentTable,
+                this.sesijaLaboratorijaTable,
+                this.sesijaResursiTable,
+                this.sesijaAlatiTable,
+                this.rezultatiSesijeTable,
+                this.btEditSesija
+        ));
+
+        this.btEditSesija.setDisable(true);
+
+        this.btEditSesija.setOnAction(new EditZakazanaSesijaControl(
+                this.sveSesijeTable,
+                this.btEditSesija
+        ));
+
+        setupPregledSesijaView();
+
         this.root.setCenter(this.showEksperimenti);
         this.root.setLeft(this.gridWest());
         this.root.setTop(this.horizontalBoxNorth());
         super.setScene(new Scene(this.root, 1500, 850));
+    }
+
+    private void setupPregledSesijaView() {
+        showPregledSesija.setAlignment(Pos.CENTER);
+        showPregledSesija.setSpacing(10);
+        showPregledSesija.setPadding(new Insets(10));
+
+        sveSesijeTable.setPrefWidth(700);
+
+        sesijaEksperimentTable.setPrefHeight(160);
+        sesijaLaboratorijaTable.setPrefHeight(150);
+        sesijaResursiTable.setPrefHeight(220);
+        sesijaAlatiTable.setPrefHeight(220);
+        rezultatiSesijeTable.setPrefHeight(220);
+
+        pregledSesijaDetailsBox.setPadding(new Insets(10));
+        btEditSesija.setPrefWidth(120);
+        pregledSesijaDetailsBox.getChildren().addAll(
+                btEditSesija,
+                new Label("Eksperiment koji se izvrsava u selektovanoj sesiji"),
+                sesijaEksperimentTable,
+
+                new Label("Laboratorija u kojoj se sesija izvodi"),
+                sesijaLaboratorijaTable,
+
+                new Label("Resursi iskorisceni u sesiji"),
+                sesijaResursiTable,
+
+                new Label("Alati korisceni u sesiji"),
+                sesijaAlatiTable,
+
+                new Label("Rezultati sesije"),
+                rezultatiSesijeTable
+        );
+
+        ScrollPane detailsScrollPane = new ScrollPane(pregledSesijaDetailsBox);
+        detailsScrollPane.setFitToWidth(true);
+        detailsScrollPane.setPrefWidth(1000);
+
+        HBox.setHgrow(sveSesijeTable, Priority.ALWAYS);
+        HBox.setHgrow(detailsScrollPane, Priority.ALWAYS);
+
+        showPregledSesija.getChildren().addAll(sveSesijeTable, detailsScrollPane);
     }
 
     private void setupLaboratorijeView() {
@@ -211,28 +307,40 @@ public class MainView extends Stage {
         RadioButton rbEksperimenti = new RadioButton();
         RadioButton rbIstrazivaci = new RadioButton();
         RadioButton rbLaboratorije = new RadioButton();
+        RadioButton rbPregledSesija = new RadioButton();
 
         ToggleGroup toggleGroup = new ToggleGroup();
 
         rbEksperimenti.setToggleGroup(toggleGroup);
         rbIstrazivaci.setToggleGroup(toggleGroup);
         rbLaboratorije.setToggleGroup(toggleGroup);
+        rbPregledSesija.setToggleGroup(toggleGroup);
 
         rbEksperimenti.setSelected(true);
 
         rbEksperimenti.setOnAction(e -> this.root.setCenter(this.showEksperimenti));
         rbIstrazivaci.setOnAction(e -> this.root.setCenter(this.showIstrazivaci));
         rbLaboratorije.setOnAction(e -> this.root.setCenter(this.showLaboratorije));
+        rbPregledSesija.setOnAction(e -> this.root.setCenter(this.showPregledSesija));
 
         VBox vbEksperimenti = new VBox(5, rbEksperimenti, new Label("Eksperimenti"));
         VBox vbIstrazivaci = new VBox(5, rbIstrazivaci, new Label("Istrazivaci"));
         VBox vbLaboratorije = new VBox(5, rbLaboratorije, new Label("Laboratorije"));
+        VBox vbPregledSesija = new VBox(5, rbPregledSesija, new Label("Pregled Sesija"));
 
         vbEksperimenti.setAlignment(Pos.CENTER);
         vbIstrazivaci.setAlignment(Pos.CENTER);
         vbLaboratorije.setAlignment(Pos.CENTER);
+        vbPregledSesija.setAlignment(Pos.CENTER);
 
-        HBox hbox = new HBox(40, vbEksperimenti, vbIstrazivaci, vbLaboratorije);
+        HBox hbox = new HBox(
+                40,
+                vbEksperimenti,
+                vbIstrazivaci,
+                vbLaboratorije,
+                vbPregledSesija
+        );
+
         hbox.setAlignment(Pos.CENTER);
         hbox.setPadding(new Insets(10));
 

@@ -64,6 +64,38 @@ public class LaboratorijaDto {
         }
     }
 
+    public static List<LaboratorijaDto> loadBySesijaId(Connection connection, int sesijaId) {
+        String query =
+                "SELECT " +
+                        "l.lab_id, " +
+                        "l.tip_lab_id, " +
+                        "l.naziv, " +
+                        "l.opis_lokacije, " +
+                        "l.kapacitet, " +
+                        "l.tehnicki_uslovi " +
+                        "FROM Sesija s " +
+                        "JOIN Izvodjenje i ON s.izvodjenje_id = i.izvodjenje_id " +
+                        "JOIN Laboratorija l ON i.lab_id = l.lab_id " +
+                        "WHERE s.sesija_id = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, sesijaId);
+
+            ResultSet rs = statement.executeQuery();
+
+            List<LaboratorijaDto> laboratorijaDtos = new ArrayList<>();
+
+            while (rs.next()) {
+                laboratorijaDtos.add(createFromResultSet(rs));
+            }
+
+            return laboratorijaDtos;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private static LaboratorijaDto createFromResultSet(ResultSet rs) throws SQLException {
         return new LaboratorijaDto(
                 rs.getInt("lab_id"),
