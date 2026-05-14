@@ -28,6 +28,13 @@ import rs.raf.m_stojanovic.bp.contactbook.model.IzvodjenjeIzvodjacDto;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.IstrazivacTable;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.EksperimentDizajnerTable;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.IzvodjenjeIzvodjacTable;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Priority;
+import rs.raf.m_stojanovic.bp.contactbook.controller.ShowLaboratorijaDetailsControl;
+import rs.raf.m_stojanovic.bp.contactbook.model.AlatLaboratorijaDto;
+import rs.raf.m_stojanovic.bp.contactbook.model.ResursLaboratorijaDto;
+import rs.raf.m_stojanovic.bp.contactbook.view.tables.AlatLaboratorijaTable;
+import rs.raf.m_stojanovic.bp.contactbook.view.tables.ResursLaboratorijaTable;
 
 public class MainView extends Stage {
 
@@ -56,6 +63,16 @@ public class MainView extends Stage {
 
     private final TableView<IzvodjenjeIzvodjacDto> izvodjenjaKaoIzvodjacTable =
             new IzvodjenjeIzvodjacTable(new java.util.ArrayList<>());
+    private final TableView<LaboratorijaDto> laboratorijeTable =
+            new LaboratorijaTable(LaboratorijaDto.loadAll(Config.getConnection()));
+
+    private final TableView<ResursLaboratorijaDto> resursiLaboratorijeTable =
+            new ResursLaboratorijaTable(new java.util.ArrayList<>());
+
+    private final TableView<AlatLaboratorijaDto> alatiLaboratorijeTable =
+            new AlatLaboratorijaTable(new java.util.ArrayList<>());
+
+    private final VBox laboratorijeDetailsBox = new VBox(10);
 
     private final VBox istrazivaciDetailsBox = new VBox(10);
 
@@ -120,10 +137,46 @@ public class MainView extends Stage {
 
         setupIstrazivaciView();
 
+        this.laboratorijeTable.setOnMouseClicked(new ShowLaboratorijaDetailsControl(
+                this.resursiLaboratorijeTable,
+                this.alatiLaboratorijeTable,
+                this.laboratorijeTable
+        ));
+
+        setupLaboratorijeView();
+
         this.root.setCenter(this.showEksperimenti);
         this.root.setLeft(this.gridWest());
         this.root.setTop(this.horizontalBoxNorth());
         super.setScene(new Scene(this.root, 1500, 850));
+    }
+
+    private void setupLaboratorijeView() {
+        showLaboratorije.setAlignment(Pos.CENTER);
+        showLaboratorije.setSpacing(10);
+        showLaboratorije.setPadding(new Insets(10));
+
+        laboratorijeTable.setPrefWidth(700);
+
+        resursiLaboratorijeTable.setPrefHeight(320);
+        alatiLaboratorijeTable.setPrefHeight(320);
+
+        laboratorijeDetailsBox.setPadding(new Insets(10));
+        laboratorijeDetailsBox.getChildren().addAll(
+                new Label("Resursi u selektovanoj laboratoriji"),
+                resursiLaboratorijeTable,
+                new Label("Alati u selektovanoj laboratoriji"),
+                alatiLaboratorijeTable
+        );
+
+        ScrollPane detailsScrollPane = new ScrollPane(laboratorijeDetailsBox);
+        detailsScrollPane.setFitToWidth(true);
+        detailsScrollPane.setPrefWidth(900);
+
+        HBox.setHgrow(laboratorijeTable, Priority.ALWAYS);
+        HBox.setHgrow(detailsScrollPane, Priority.ALWAYS);
+
+        showLaboratorije.getChildren().addAll(laboratorijeTable, detailsScrollPane);
     }
 
     private void setupIstrazivaciView() {

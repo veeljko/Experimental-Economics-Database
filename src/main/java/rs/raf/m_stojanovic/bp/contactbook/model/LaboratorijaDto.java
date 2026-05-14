@@ -6,6 +6,34 @@ import java.util.List;
 
 public class LaboratorijaDto {
 
+    public static List<LaboratorijaDto> loadAll(Connection connection) {
+        String query =
+                "SELECT " +
+                        "lab_id, " +
+                        "tip_lab_id, " +
+                        "naziv, " +
+                        "opis_lokacije, " +
+                        "kapacitet, " +
+                        "tehnicki_uslovi " +
+                        "FROM Laboratorija " +
+                        "ORDER BY lab_id";
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            List<LaboratorijaDto> laboratorijaDtos = new ArrayList<>();
+
+            while (rs.next()) {
+                laboratorijaDtos.add(createFromResultSet(rs));
+            }
+
+            return laboratorijaDtos;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static List<LaboratorijaDto> loadById(Connection connection, int labId) {
         String query =
                 "SELECT " +
@@ -27,20 +55,24 @@ public class LaboratorijaDto {
             List<LaboratorijaDto> laboratorijaDtos = new ArrayList<>();
 
             while (rs.next()) {
-                laboratorijaDtos.add(new LaboratorijaDto(
-                        rs.getInt("lab_id"),
-                        rs.getInt("tip_lab_id"),
-                        rs.getString("naziv"),
-                        rs.getString("opis_lokacije"),
-                        rs.getInt("kapacitet"),
-                        rs.getString("tehnicki_uslovi")
-                ));
+                laboratorijaDtos.add(createFromResultSet(rs));
             }
 
             return laboratorijaDtos;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static LaboratorijaDto createFromResultSet(ResultSet rs) throws SQLException {
+        return new LaboratorijaDto(
+                rs.getInt("lab_id"),
+                rs.getInt("tip_lab_id"),
+                rs.getString("naziv"),
+                rs.getString("opis_lokacije"),
+                rs.getInt("kapacitet"),
+                rs.getString("tehnicki_uslovi")
+        );
     }
 
     private final int labId;
