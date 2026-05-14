@@ -2,6 +2,7 @@ package rs.raf.m_stojanovic.bp.contactbook.controller;
 
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import rs.raf.m_stojanovic.bp.contactbook.Config;
@@ -14,15 +15,18 @@ public class ShowLaboratorijaDetailsControl implements EventHandler<MouseEvent> 
     private final TableView<ResursLaboratorijaDto> resursiLaboratorijeTable;
     private final TableView<AlatLaboratorijaDto> alatiLaboratorijeTable;
     private final TableView<LaboratorijaDto> laboratorijeTable;
+    private final Button btDeleteLaboratorija;
 
     public ShowLaboratorijaDetailsControl(
             TableView<ResursLaboratorijaDto> resursiLaboratorijeTable,
             TableView<AlatLaboratorijaDto> alatiLaboratorijeTable,
-            TableView<LaboratorijaDto> laboratorijeTable
+            TableView<LaboratorijaDto> laboratorijeTable,
+            Button btDeleteLaboratorija
     ) {
         this.resursiLaboratorijeTable = resursiLaboratorijeTable;
         this.alatiLaboratorijeTable = alatiLaboratorijeTable;
         this.laboratorijeTable = laboratorijeTable;
+        this.btDeleteLaboratorija = btDeleteLaboratorija;
     }
 
     @Override
@@ -31,6 +35,7 @@ public class ShowLaboratorijaDetailsControl implements EventHandler<MouseEvent> 
                 this.laboratorijeTable.getSelectionModel().getSelectedItem();
 
         if (selectedLaboratorija == null) {
+            this.btDeleteLaboratorija.setDisable(true);
             return;
         }
 
@@ -43,5 +48,8 @@ public class ShowLaboratorijaDetailsControl implements EventHandler<MouseEvent> 
         this.alatiLaboratorijeTable.setItems(FXCollections.observableArrayList(
                 AlatLaboratorijaDto.loadByLabId(Config.getConnection(), labId)
         ));
+
+        boolean canDelete = LaboratorijaDto.canDelete(Config.getConnection(), labId);
+        this.btDeleteLaboratorija.setDisable(!canDelete);
     }
 }

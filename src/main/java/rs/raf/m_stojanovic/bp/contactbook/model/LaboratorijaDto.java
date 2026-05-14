@@ -96,6 +96,83 @@ public class LaboratorijaDto {
         }
     }
 
+    public static boolean canDelete(Connection connection, int labId) {
+        String query =
+                "SELECT COUNT(*) AS broj " +
+                        "FROM Izvodjenje i " +
+                        "JOIN Izvodjenje_Izvodjac ii ON i.izvodjenje_id = ii.izvodjenje_id " +
+                        "WHERE i.lab_id = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, labId);
+
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("broj") == 0;
+            }
+
+            return false;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void deleteById(Connection connection, int labId) {
+        if (!canDelete(connection, labId)) {
+            throw new RuntimeException("Brisanje nije dozvoljeno jer u laboratoriji radi najmanje jedan istraživač.");
+        }
+
+        String deleteAlati =
+                "DELETE FROM Alat " +
+                        "WHERE lab_id = ?";
+
+        String deleteResursiLaboratorije =
+                "DELETE FROM Resurs_Laboratorija " +
+                        "WHERE lab_id = ?";
+
+        String deleteLaboratorija =
+                "DELETE FROM Laboratorija " +
+                        "WHERE lab_id = ?";
+
+        try {
+            connection.setAutoCommit(false);
+
+            PreparedStatement deleteAlatiStatement = connection.prepareStatement(deleteAlati);
+            deleteAlatiStatement.setInt(1, labId);
+            deleteAlatiStatement.executeUpdate();
+
+            PreparedStatement deleteResursiStatement = connection.prepareStatement(deleteResursiLaboratorije);
+            deleteResursiStatement.setInt(1, labId);
+            deleteResursiStatement.executeUpdate();
+
+            PreparedStatement deleteLaboratorijaStatement = connection.prepareStatement(deleteLaboratorija);
+            deleteLaboratorijaStatement.setInt(1, labId);
+
+            int rowsAffected = deleteLaboratorijaStatement.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new RuntimeException("Laboratorija nije pronađena.");
+            }
+
+            connection.commit();
+            connection.setAutoCommit(true);
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+                connection.setAutoCommit(true);
+            } catch (SQLException rollbackException) {
+                throw new RuntimeException(rollbackException);
+            }
+
+            throw new RuntimeException(
+                    "Laboratorija nije obrisana. Proveri da li postoje izvođenja ili drugi podaci koji još uvek referenciraju ovu laboratoriju."
+            );
+        }
+    }
+
     private static LaboratorijaDto createFromResultSet(ResultSet rs) throws SQLException {
         return new LaboratorijaDto(
                 rs.getInt("lab_id"),

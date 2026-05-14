@@ -19,8 +19,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.control.ScrollPane;
 import rs.raf.m_stojanovic.bp.contactbook.model.*;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.*;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Priority;
 import rs.raf.m_stojanovic.bp.contactbook.controller.ShowIstrazivacDetailsControl;
 import rs.raf.m_stojanovic.bp.contactbook.model.IstrazivacDto;
 import rs.raf.m_stojanovic.bp.contactbook.model.EksperimentDizajnerDto;
@@ -28,8 +26,6 @@ import rs.raf.m_stojanovic.bp.contactbook.model.IzvodjenjeIzvodjacDto;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.IstrazivacTable;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.EksperimentDizajnerTable;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.IzvodjenjeIzvodjacTable;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Priority;
 import rs.raf.m_stojanovic.bp.contactbook.controller.ShowLaboratorijaDetailsControl;
 import rs.raf.m_stojanovic.bp.contactbook.model.AlatLaboratorijaDto;
 import rs.raf.m_stojanovic.bp.contactbook.model.ResursLaboratorijaDto;
@@ -37,6 +33,7 @@ import rs.raf.m_stojanovic.bp.contactbook.view.tables.AlatLaboratorijaTable;
 import rs.raf.m_stojanovic.bp.contactbook.view.tables.ResursLaboratorijaTable;
 import rs.raf.m_stojanovic.bp.contactbook.controller.ShowPregledSesijeDetailsControl;
 import rs.raf.m_stojanovic.bp.contactbook.controller.EditZakazanaSesijaControl;
+import rs.raf.m_stojanovic.bp.contactbook.controller.DeleteLaboratorijaControl;
 
 public class MainView extends Stage {
 
@@ -110,6 +107,8 @@ public class MainView extends Stage {
 
     private final VBox istrazivaciDetailsBox = new VBox(10);
 
+    private final Button btDeleteLaboratorija = new Button("DELETE");
+
     private final VBox detailsBox = new VBox(10);
     private final HBox showEksperimenti = new HBox();
     private final HBox showLaboratorije = new HBox();
@@ -174,7 +173,17 @@ public class MainView extends Stage {
         this.laboratorijeTable.setOnMouseClicked(new ShowLaboratorijaDetailsControl(
                 this.resursiLaboratorijeTable,
                 this.alatiLaboratorijeTable,
-                this.laboratorijeTable
+                this.laboratorijeTable,
+                this.btDeleteLaboratorija
+        ));
+
+        this.btDeleteLaboratorija.setDisable(true);
+
+        this.btDeleteLaboratorija.setOnAction(new DeleteLaboratorijaControl(
+                this.laboratorijeTable,
+                this.resursiLaboratorijeTable,
+                this.alatiLaboratorijeTable,
+                this.btDeleteLaboratorija
         ));
 
         setupLaboratorijeView();
@@ -257,10 +266,15 @@ public class MainView extends Stage {
         resursiLaboratorijeTable.setPrefHeight(320);
         alatiLaboratorijeTable.setPrefHeight(320);
 
+        btDeleteLaboratorija.setPrefWidth(120);
+
         laboratorijeDetailsBox.setPadding(new Insets(10));
         laboratorijeDetailsBox.getChildren().addAll(
+                btDeleteLaboratorija,
+
                 new Label("Resursi u selektovanoj laboratoriji"),
                 resursiLaboratorijeTable,
+
                 new Label("Alati u selektovanoj laboratoriji"),
                 alatiLaboratorijeTable
         );
