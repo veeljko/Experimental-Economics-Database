@@ -3,7 +3,15 @@ USE ekonomija_eksperimenti;
 DROP PROCEDURE IF EXISTS zavrsi_sesiju;
 
 DELIMITER $$
-
+--  1. Proveri da li sesija postoji.
+--  2. Proveri da li je već završena.
+--  3. Ako nije, postavi status_sesije_id = 3.
+--  4. Ako su sve sesije tog izvođenja završene, postavi i status_izvodjenja_id = 3.
+--  5. Izračuna broj korišćenih resursa i njihovu ukupnu količinu.
+--  6. Izračuna broj korišćenih alata.
+--  7. Upisuje automatski rezultat u Rezultat_Sesije.
+--  8. Potvrđuje izmene transakcijom.
+--  Uvodi se kako bi se bezbedno sesija oznacila zavrsenom i upisala u tabelu sa rezultatima.
 CREATE PROCEDURE zavrsi_sesiju(
     IN p_sesija_id INT
 )

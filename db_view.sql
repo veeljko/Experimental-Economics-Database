@@ -1,5 +1,9 @@
 USE ekonomija_eksperimenti;
 
+-- Ovaj view lab_br_resurs_i_alat pravi pregled laboratorija
+-- koje imaju bar jedan alat i bar jedan resurs, i za svaku
+-- takvu laboratoriju prikazuje koliko ima alata i resursa.
+-- Uvodi se za pregled laboratorija koje su stvarno operativne, tj. imaju i alate i resurse.
 CREATE VIEW lab_br_resurs_i_alat AS
 SELECT
     l.lab_id,

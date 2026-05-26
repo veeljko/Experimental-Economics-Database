@@ -4,7 +4,12 @@ DROP FUNCTION IF EXISTS fn_kategorija_trajanja_sesije;
 DROP FUNCTION IF EXISTS test_fn_kategorija_trajanja_sesije;
 
 DELIMITER $$
-
+-- Funkcija na osnovu pocetka i kraja neke sesije, odredjuje njen tip.
+-- Kratka, ako traje krace od 60min.
+-- Standardna, ako traje od 60min do 180min.
+-- Duga, ako traje vise od 180min.
+-- Moguce je da funkcija vrati "NEVALIDNO", ako input parametri nisu ispravni.
+-- Uvodi se radi lakseg grupisanja po trajanju, bez cestog ponavljanja koda.
 CREATE FUNCTION fn_kategorija_trajanja_sesije(
     p_vreme_pocetka TIME,
     p_vreme_kraja TIME
@@ -18,7 +23,7 @@ BEGIN
         RETURN 'NEVALIDNO';
     END IF;
 
-    IF p_vreme_kraja <= p_vreme_pocetka THEN
+    IF p_vreme_kraja < p_vreme_pocetka THEN
         RETURN 'NEVALIDNO';
     END IF;
 
