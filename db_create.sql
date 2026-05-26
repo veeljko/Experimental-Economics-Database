@@ -411,34 +411,3 @@ CREATE TABLE Rezultat_Sesije (
                                      ON UPDATE CASCADE
                                      ON DELETE CASCADE
 );
-
--- ============================================================
--- Indeksi za cesce pretrage
--- ============================================================
-
--- CREATE INDEX idx_laboratorija_tip
---     ON Laboratorija(tip_lab_id);
---
--- CREATE INDEX idx_resurs_vrsta
---     ON Resurs(vrsta_resursa_id);
---
--- CREATE INDEX idx_alat_lab
---     ON Alat(lab_id);
---
--- CREATE INDEX idx_alat_tip
---     ON Alat(tip_alata_id);
---
--- CREATE INDEX idx_eksperiment_valuta_budzeta
---     ON Eksperiment(valuta_budzeta_id);
---
--- CREATE INDEX idx_izvodjenje_eksperiment
---     ON Izvodjenje(eksperiment_id);
---
--- CREATE INDEX idx_izvodjenje_lab
---     ON Izvodjenje(lab_id);
---
--- CREATE INDEX idx_sesija_izvodjenje
---     ON Sesija(izvodjenje_id);
---
--- CREATE INDEX idx_sesija_datum_vreme
---     ON Sesija(datum, vreme_pocetka, vreme_zavrsetka);
