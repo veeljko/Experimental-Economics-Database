@@ -11,7 +11,7 @@ DELIMITER $$
 -- Moguce je da funkcija vrati "NEVALIDNO", ako input parametri nisu ispravni.
 -- Uvodi se radi lakseg grupisanja po trajanju, bez cestog ponavljanja koda.
 CREATE FUNCTION fn_kategorija_trajanja_sesije(
-    p_vreme_pocetka TIME,
+    p_vreme_pocetka TIME
     p_vreme_kraja TIME
 )
     RETURNS VARCHAR(20)
