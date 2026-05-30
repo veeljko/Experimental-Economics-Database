@@ -1,5 +1,5 @@
 -- Ovaj upit za svaku ekonomsku teoriju prikazuje: naziv teorije, broj eksperimenata koji koriste tu teoriju,
--- broj izvođenja tih eksperimenata, prosečan budžet eksperimenata, prosečan broj učesnika
+-- broj izvođenja tih eksperimenata, prosečan budžet eksperimenata, prosečan broj učesnikaa
 
 
 USE ekonomija_eksperimenti;
