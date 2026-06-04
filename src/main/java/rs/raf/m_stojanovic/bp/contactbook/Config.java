@@ -17,37 +17,18 @@ import java.util.Properties;
 
 public class Config {
 
-    private static final LocalDateTime NOW = LocalDateTime.now();
-
     private static Properties properties = null;
     private static Connection relationalDatabaseConnection;
     private static MongoClient mongoDatabaseClient;
     private static MongoDatabase mongoDatabaseConnection;
 
-    public static void logToMongoDatabase(String message) {
-        MongoCollection<Document> logs = mongoDatabaseConnection.getCollection("logs");
-        logs.updateOne(
-                new Document("datetime", NOW),
-                new Document("$push", new Document("messages",
-                        new Document("message", message).append("datetime", LocalDateTime.now())))
-        );
-    }
-
     public static void connectToMongoDatabase(String host, String port, String db) {
         String url = "mongodb://" + host + ":" + port;
         mongoDatabaseClient = MongoClients.create(url);
         mongoDatabaseConnection = mongoDatabaseClient.getDatabase(db);
-
-        MongoCollection<Document> logs = mongoDatabaseConnection.getCollection("logs");
-        Document document = new Document("datetime", NOW)
-                .append("messages", List.of(
-                        new Document("message", "connecting")));
-        logs.insertOne(document);
     }
 
     public static void disconnectFromMongoDatabase() {
-        logToMongoDatabase("disconnecting");
-
         mongoDatabaseClient.close();
     }
 

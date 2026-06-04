@@ -23,7 +23,7 @@ public class UspesnoZavrsenEksperimentDto {
                         "FROM Eksperiment e " +
                         "JOIN Izvodjenje i ON i.eksperiment_id = e.eksperiment_id " +
                         "JOIN Status_Izvodjenja si ON si.status_izvodjenja_id = i.status_izvodjenja_id " +
-                        "WHERE si.naziv = 'završeno uspešno' " +
+                        "WHERE si.naziv = 'Zavrseno'" +
                         "ORDER BY e.eksperiment_id";
 
         try {
