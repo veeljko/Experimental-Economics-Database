@@ -26,7 +26,7 @@ public class ShowTipSesijeControl implements EventHandler<MouseEvent> {
         int tipSesijeId = cell.getItem();
 
         TipSesijeTable tipSesijeTable = new TipSesijeTable(
-                TipSesijeDto.loadById(Config.getConnection(), tipSesijeId)
+                TipSesijeDto.loadById(Config.getRelationalDatabaseConnection(), tipSesijeId)
         );
 
         Stage stage = new Stage();

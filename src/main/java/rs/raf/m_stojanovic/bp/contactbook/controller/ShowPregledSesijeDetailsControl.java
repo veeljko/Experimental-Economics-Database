@@ -50,23 +50,23 @@ public class ShowPregledSesijeDetailsControl implements EventHandler<MouseEvent>
         int sesijaId = selectedSesija.getSesijaId();
 
         this.sesijaEksperimentTable.setItems(FXCollections.observableArrayList(
-                EksperimentDto.loadBySesijaId(Config.getConnection(), sesijaId)
+                EksperimentDto.loadBySesijaId(Config.getRelationalDatabaseConnection(), sesijaId)
         ));
 
         this.sesijaLaboratorijaTable.setItems(FXCollections.observableArrayList(
-                LaboratorijaDto.loadBySesijaId(Config.getConnection(), sesijaId)
+                LaboratorijaDto.loadBySesijaId(Config.getRelationalDatabaseConnection(), sesijaId)
         ));
 
         this.sesijaResursiTable.setItems(FXCollections.observableArrayList(
-                SesijaResursDetaljiDto.loadBySesijaId(Config.getConnection(), sesijaId)
+                SesijaResursDetaljiDto.loadBySesijaId(Config.getRelationalDatabaseConnection(), sesijaId)
         ));
 
         this.sesijaAlatiTable.setItems(FXCollections.observableArrayList(
-                SesijaAlatDetaljiDto.loadBySesijaId(Config.getConnection(), sesijaId)
+                SesijaAlatDetaljiDto.loadBySesijaId(Config.getRelationalDatabaseConnection(), sesijaId)
         ));
 
         this.rezultatiSesijeTable.setItems(FXCollections.observableArrayList(
-                RezultatSesijeDto.loadBySesijaId(Config.getConnection(), sesijaId)
+                RezultatSesijeDto.loadBySesijaId(Config.getRelationalDatabaseConnection(), sesijaId)
         ));
     }
 }

@@ -26,7 +26,7 @@ public class ShowValutaControl implements EventHandler<MouseEvent> {
         int valutaId = cell.getItem();
 
         ValutaTable valutaTable = new ValutaTable(
-                ValutaDto.loadById(Config.getConnection(), valutaId)
+                ValutaDto.loadById(Config.getRelationalDatabaseConnection(), valutaId)
         );
 
         Stage stage = new Stage();

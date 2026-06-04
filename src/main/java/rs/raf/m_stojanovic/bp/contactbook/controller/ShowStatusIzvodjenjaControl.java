@@ -26,7 +26,7 @@ public class ShowStatusIzvodjenjaControl implements EventHandler<MouseEvent> {
         int statusIzvodjenjaId = cell.getItem();
 
         StatusIzvodjenjaTable statusIzvodjenjaTable = new StatusIzvodjenjaTable(
-                StatusIzvodjenjaDto.loadById(Config.getConnection(), statusIzvodjenjaId)
+                StatusIzvodjenjaDto.loadById(Config.getRelationalDatabaseConnection(), statusIzvodjenjaId)
         );
 
         Stage stage = new Stage();

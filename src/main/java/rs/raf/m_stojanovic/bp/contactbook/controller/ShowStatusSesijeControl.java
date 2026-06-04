@@ -26,7 +26,7 @@ public class ShowStatusSesijeControl implements EventHandler<MouseEvent> {
         int statusSesijeId = cell.getItem();
 
         StatusSesijeTable statusSesijeTable = new StatusSesijeTable(
-                StatusSesijeDto.loadById(Config.getConnection(), statusSesijeId)
+                StatusSesijeDto.loadById(Config.getRelationalDatabaseConnection(), statusSesijeId)
         );
 
         Stage stage = new Stage();

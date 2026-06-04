@@ -106,7 +106,7 @@ public class EditZakazanaSesijaControl implements EventHandler<ActionEvent> {
                 String opis = taOpis.getText();
 
                 SesijaDto.updateZakazanaSesija(
-                        Config.getConnection(),
+                        Config.getRelationalDatabaseConnection(),
                         selectedSesija.getSesijaId(),
                         tipSesijeId,
                         statusSesijeId,
@@ -118,7 +118,7 @@ public class EditZakazanaSesijaControl implements EventHandler<ActionEvent> {
                 );
 
                 this.sveSesijeTable.setItems(FXCollections.observableArrayList(
-                        SesijaDto.readAll(Config.getConnection())
+                        SesijaDto.readAll(Config.getRelationalDatabaseConnection())
                 ));
 
                 this.btEditSesija.setDisable(true);

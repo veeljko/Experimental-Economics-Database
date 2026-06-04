@@ -45,7 +45,7 @@ public class DeleteLaboratorijaControl implements EventHandler<ActionEvent> {
 
         int labId = selectedLaboratorija.getLabId();
 
-        if (!LaboratorijaDto.canDelete(Config.getConnection(), labId)) {
+        if (!LaboratorijaDto.canDelete(Config.getRelationalDatabaseConnection(), labId)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Brisanje laboratorije");
             alert.setHeaderText("Laboratorija ne može da se obriše");
@@ -68,10 +68,10 @@ public class DeleteLaboratorijaControl implements EventHandler<ActionEvent> {
         }
 
         try {
-            LaboratorijaDto.deleteById(Config.getConnection(), labId);
+            LaboratorijaDto.deleteById(Config.getRelationalDatabaseConnection(), labId);
 
             this.laboratorijeTable.setItems(FXCollections.observableArrayList(
-                    LaboratorijaDto.loadAll(Config.getConnection())
+                    LaboratorijaDto.loadAll(Config.getRelationalDatabaseConnection())
             ));
 
             this.resursiLaboratorijeTable.setItems(FXCollections.observableArrayList(

@@ -38,7 +38,7 @@ import rs.raf.m_stojanovic.bp.contactbook.controller.DeleteLaboratorijaControl;
 public class MainView extends Stage {
 
     private final BorderPane root = new BorderPane();
-    private final TableView<EksperimentDto> eksperimentTable = new EksperimentTable(EksperimentDto.loadAll(Config.getConnection()));
+    private final TableView<EksperimentDto> eksperimentTable = new EksperimentTable(EksperimentDto.loadAll(Config.getRelationalDatabaseConnection()));
     private final TableView<SesijaDto> sesijeTable =
             new SesijaTable(new java.util.ArrayList<>());
 
@@ -55,7 +55,7 @@ public class MainView extends Stage {
             new TipAlataEksperimentTable(new java.util.ArrayList<>());
 
     private final TableView<IstrazivacDto> istrazivaciTable =
-            new IstrazivacTable(IstrazivacDto.loadAll(Config.getConnection()));
+            new IstrazivacTable(IstrazivacDto.loadAll(Config.getRelationalDatabaseConnection()));
 
     private final TableView<EksperimentDizajnerDto> eksperimentiKaoDizajnerTable =
             new EksperimentDizajnerTable(new java.util.ArrayList<>());
@@ -63,7 +63,7 @@ public class MainView extends Stage {
     private final TableView<IzvodjenjeIzvodjacDto> izvodjenjaKaoIzvodjacTable =
             new IzvodjenjeIzvodjacTable(new java.util.ArrayList<>());
     private final TableView<LaboratorijaDto> laboratorijeTable =
-            new LaboratorijaTable(LaboratorijaDto.loadAll(Config.getConnection()));
+            new LaboratorijaTable(LaboratorijaDto.loadAll(Config.getRelationalDatabaseConnection()));
 
     private final TableView<ResursLaboratorijaDto> resursiLaboratorijeTable =
             new ResursLaboratorijaTable(new java.util.ArrayList<>());
@@ -73,7 +73,7 @@ public class MainView extends Stage {
     private final HBox showPregledSesija = new HBox();
 
     private final TableView<SesijaDto> sveSesijeTable =
-            new SesijaTable(SesijaDto.readAll(Config.getConnection()));
+            new SesijaTable(SesijaDto.readAll(Config.getRelationalDatabaseConnection()));
 
     private final TableView<EksperimentDto> sesijaEksperimentTable =
             new EksperimentTable(new java.util.ArrayList<>());

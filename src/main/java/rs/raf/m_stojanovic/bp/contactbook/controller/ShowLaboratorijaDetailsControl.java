@@ -42,14 +42,14 @@ public class ShowLaboratorijaDetailsControl implements EventHandler<MouseEvent> 
         int labId = selectedLaboratorija.getLabId();
 
         this.resursiLaboratorijeTable.setItems(FXCollections.observableArrayList(
-                ResursLaboratorijaDto.loadByLabId(Config.getConnection(), labId)
+                ResursLaboratorijaDto.loadByLabId(Config.getRelationalDatabaseConnection(), labId)
         ));
 
         this.alatiLaboratorijeTable.setItems(FXCollections.observableArrayList(
-                AlatLaboratorijaDto.loadByLabId(Config.getConnection(), labId)
+                AlatLaboratorijaDto.loadByLabId(Config.getRelationalDatabaseConnection(), labId)
         ));
 
-        boolean canDelete = LaboratorijaDto.canDelete(Config.getConnection(), labId);
+        boolean canDelete = LaboratorijaDto.canDelete(Config.getRelationalDatabaseConnection(), labId);
         this.btDeleteLaboratorija.setDisable(!canDelete);
     }
 }

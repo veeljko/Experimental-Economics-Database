@@ -44,23 +44,23 @@ public class ShowSesijeControl implements EventHandler<MouseEvent> {
         int eksperimentId = selectedEksperiment.getEksperimentId();
 
         this.sesijeTable.setItems(FXCollections.observableArrayList(
-                SesijaDto.readByEksperimentId(Config.getConnection(), eksperimentId)
+                SesijaDto.readByEksperimentId(Config.getRelationalDatabaseConnection(), eksperimentId)
         ));
 
         this.dizajneriEksperimentaTable.setItems(FXCollections.observableArrayList(
-                DizajnerEksperimentDto.loadByEksperimentId(Config.getConnection(), eksperimentId)
+                DizajnerEksperimentDto.loadByEksperimentId(Config.getRelationalDatabaseConnection(), eksperimentId)
         ));
 
         this.resursiEksperimentaTable.setItems(FXCollections.observableArrayList(
-                ResursEksperimentDto.loadByEksperimentId(Config.getConnection(), eksperimentId)
+                ResursEksperimentDto.loadByEksperimentId(Config.getRelationalDatabaseConnection(), eksperimentId)
         ));
 
         this.teorijeEksperimentaTable.setItems(FXCollections.observableArrayList(
-                TeorijaEksperimentDto.loadByEksperimentId(Config.getConnection(), eksperimentId)
+                TeorijaEksperimentDto.loadByEksperimentId(Config.getRelationalDatabaseConnection(), eksperimentId)
         ));
 
         this.tipoviAlataEksperimentaTable.setItems(FXCollections.observableArrayList(
-                TipAlataEksperimentDto.loadByEksperimentId(Config.getConnection(), eksperimentId)
+                TipAlataEksperimentDto.loadByEksperimentId(Config.getRelationalDatabaseConnection(), eksperimentId)
         ));
     }
 }

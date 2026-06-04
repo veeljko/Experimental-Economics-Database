@@ -37,11 +37,11 @@ public class ShowIstrazivacDetailsControl implements EventHandler<MouseEvent> {
         int istrazivacId = selectedIstrazivac.getIstrazivacId();
 
         this.eksperimentiKaoDizajnerTable.setItems(FXCollections.observableArrayList(
-                EksperimentDizajnerDto.loadByIstrazivacId(Config.getConnection(), istrazivacId)
+                EksperimentDizajnerDto.loadByIstrazivacId(Config.getRelationalDatabaseConnection(), istrazivacId)
         ));
 
         this.izvodjenjaKaoIzvodjacTable.setItems(FXCollections.observableArrayList(
-                IzvodjenjeIzvodjacDto.loadByIstrazivacId(Config.getConnection(), istrazivacId)
+                IzvodjenjeIzvodjacDto.loadByIstrazivacId(Config.getRelationalDatabaseConnection(), istrazivacId)
         ));
     }
 }

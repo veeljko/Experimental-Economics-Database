@@ -26,7 +26,7 @@ public class ShowTipLaboratorijeControl implements EventHandler<MouseEvent> {
         int tipLabId = cell.getItem();
 
         TipLaboratorijeTable tipLaboratorijeTable = new TipLaboratorijeTable(
-                TipLaboratorijeDto.loadById(Config.getConnection(), tipLabId)
+                TipLaboratorijeDto.loadById(Config.getRelationalDatabaseConnection(), tipLabId)
         );
 
         Stage stage = new Stage();

@@ -26,7 +26,7 @@ public class ShowLaboratorijaControl implements EventHandler<MouseEvent> {
         int labId = cell.getItem();
 
         LaboratorijaTable laboratorijaTable = new LaboratorijaTable(
-                LaboratorijaDto.loadById(Config.getConnection(), labId)
+                LaboratorijaDto.loadById(Config.getRelationalDatabaseConnection(), labId)
         );
 
         Stage stage = new Stage();
